@@ -1,0 +1,31 @@
+{% import "benchmark.helpers" as benchmark with context %}
+
+{
+  "version": 2,
+  "description": "Custom logs",
+  "indices": [
+    {
+      "name": "custom",
+      "body": "index.json"
+    }
+  ],
+  "corpora": [
+    {
+      "name": "custom",
+      "#TODO": "Upload compressed bz2 custom docs to s3",
+      "base-url": "https://<S3_URL>.s3.ap-southeast-1.amazonaws.com/opensearch_benchmark_workloads/custom_logs",
+      "documents": [
+        {
+          "source-file": "documents.json.bz2",
+          "document-count": 574199
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {{ benchmark.collect(parts="operations/*.json") }}
+  ],
+  "test_procedures": [
+    {{ benchmark.collect(parts="test_procedures/*.json") }}
+  ]
+}

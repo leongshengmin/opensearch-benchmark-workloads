@@ -1,17 +1,21 @@
 from copy import copy
-import re
 
 from osbenchmark import exceptions
 from osbenchmark.workload import loader
 
-
-def reindex(es, params):
-    result = es.reindex(body=params.get("body"), request_timeout=params.get("request_timeout"))
+def reindex(es, params, routing_field="client_ip"):
+    script = {
+        "inline": f"ctx._routing = doc.{routing_field}.value"
+    }
+    result = es.reindex(body=params.get("body"), script=script, request_timeout=params.get("request_timeout"))
     return result["total"], "docs"
 
 
-async def reindex_async(es, params):
-    result = await es.reindex(body=params.get("body"), request_timeout=params.get("request_timeout"))
+async def reindex_async(es, params, routing_field="client_ip"):
+    script = {
+        "inline": f"ctx._routing = doc.{routing_field}.value"
+    }
+    result = await es.reindex(body=params.get("body"), script=script, request_timeout=params.get("request_timeout"))
     return result["total"], "docs"
 
 

@@ -1,0 +1,308 @@
+    {
+      "name": "index-append",
+      "operation-type": "bulk",
+      "bulk-size": {{bulk_size | default(500)}},
+      "ingest-percentage": {{ingest_percentage | default(100)}}
+    },
+    {
+      "name": "index-update",
+      "operation-type": "bulk",
+      "bulk-size": {{bulk_size | default(500)}},
+      "ingest-percentage": {{ingest_percentage | default(100)}},
+      "conflicts": "{{conflicts | default('random')}}",
+      "on-conflict": "{{on_conflict | default('index')}}",
+      "conflict-probability": {{conflict_probability | default(25)}},
+      "recency": {{recency | default(0)}}
+    },
+    {
+      "name": "match_all",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "query": {
+          "match_all": {}
+        }
+      }
+    },
+    {
+      "name": "keyword_search",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "query": {
+          "term": {
+            "app_name": "api-gateway"
+          }
+        }
+      }
+    },
+    {
+      "name": "full_text_search",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "match_phrase": {
+            "message": "panic.go"
+          }
+        }
+      }
+    },
+    {
+      "name": "hourly_agg",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 0,
+        "aggs": {
+          "by_hour": {
+            "date_histogram": {
+              "field": "@timestamp",
+              "calendar_interval": "hour"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "timerange",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "range": {
+            "@timestamp": {
+              "gte": "now-{{'15-05-1998' | days_ago(now)}}d/d",
+              "lt": "now/d"
+            }
+          }
+        }
+      }
+    }
+    {
+      "name": "typical_kib_search_query_no_filter",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "aggs": {
+          "by_hour": {
+            "date_histogram": {
+              "field": "@timestamp",
+              "calendar_interval": "hour"
+            }
+          }
+        },
+        "sort" : [
+          {"@timestamp" : "desc"}
+        ]
+      }
+    },
+    {
+      "name": "typical_kib_search_query_timerange_filter",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "range": {
+            "@timestamp": {
+              "gte": "2023-05-03T00:00:00Z",
+              "lt": "2023-10-07T00:00:00Z"
+            }
+          }
+        },
+        "aggs": {
+          "by_hour": {
+            "date_histogram": {
+              "field": "@timestamp",
+              "calendar_interval": "hour"
+            }
+          }
+        },
+        "sort" : [
+          {"@timestamp" : "desc"}
+        ]
+      }
+    },
+    {
+      "name": "typical_kib_search_query_app_name_timerange_filter",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "bool": {
+            "must": [
+              {
+                "range": {
+                  "@timestamp": {
+                    "gte": "2023-05-03T00:00:00Z",
+                    "lt": "2023-10-07T00:00:00Z"
+                  }
+                }
+              },
+              {
+                "match": {
+                  "app_name": "food-pax-api"
+                }
+              }
+            ]
+          }
+        },
+        "aggs": {
+          "by_hour": {
+            "date_histogram": {
+              "field": "@timestamp",
+              "calendar_interval": "hour"
+            }
+          }
+        },
+        "sort" : [
+          {"@timestamp" : "desc"}
+        ]
+      }
+    },
+    {
+      "name": "typical_kib_search_query_app_name_filter",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "bool": {
+            "must": [
+              {
+                "match": {
+                  "app_name": "food-pax-api"
+                }
+              }
+            ]
+          }
+        },
+        "aggs": {
+          "by_hour": {
+            "date_histogram": {
+              "field": "@timestamp",
+              "calendar_interval": "hour"
+            }
+          }
+        },
+        "sort" : [
+          {"@timestamp" : "desc"}
+        ]
+      }
+    },
+    {
+      "name": "desc_sort_size",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "match_all": {}
+        },
+        "sort" : [
+          {"size" : "desc"}
+        ]
+      }
+    },
+    {
+      "name": "asc_sort_size",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "match_all": {}
+        },
+        "sort" : [
+          {"size" : "asc"}
+        ]
+      }
+    },
+    {
+      "name": "desc_sort_timestamp",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "match_all": {}
+        },
+        "sort" : [
+          {"@timestamp" : "desc"}
+        ]
+      }
+    },
+    {
+      "name": "asc_sort_timestamp",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "match_all": {}
+        },
+        "sort" : [
+          {"@timestamp" : "asc"}
+        ]
+      }
+    },
+    {
+      "name": "multi_term_agg",
+      "operation-type": "search",
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 0,
+        "query": {
+          "range": {
+            "@timestamp": {
+              "gte": "2023-05-03T00:00:00Z",
+              "lt": "2023-10-07T00:00:00Z"
+            }
+          }
+        },
+        "aggs": {
+          "mterms": {
+            "multi_terms": {
+              "terms": [
+                {"field": "app_name"},
+                {"field": "hostname"},
+                {"field": "fileset.module"}
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "scroll",
+      "operation-type": "search",
+      "pages": 25,
+      "results-per-page": 100,
+      "#COMMENT": "Large responses cause overhead on the client when decompressing the response. Disable to avoid the overhead",
+      "response-compression-enabled": false,
+      "body": {
+        "size": 500,
+        "query": {
+          "match_all": {}
+        }
+      }
+    }

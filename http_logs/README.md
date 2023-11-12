@@ -48,7 +48,8 @@ node pipeline to run. Valid options are `'baseline'` (default), `'grok'`  and `'
 * `error_level` (default: "non-fatal"): Available for bulk operations only to specify ignore-response-error-level.
 * `target_throughput` (default: default values for each operation): Number of requests per second, `none` for no limit.
 * `search_clients`: Number of clients that issues search requests.
-
+* `routing_partition_size`: Maps to `index.routing_partition_size`. (Optional)
+* `routing`: Routing field. Defaults to `_id`.
 
 ### Beta Feature: Increasing the size of the data corpus
 

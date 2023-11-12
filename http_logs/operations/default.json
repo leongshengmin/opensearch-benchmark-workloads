@@ -3,7 +3,10 @@
       "operation-type": "bulk",
       "bulk-size": {{bulk_size | default(5000)}},
       "ingest-percentage": {{ingest_percentage | default(100)}},
-      "corpora": "http_logs"
+      "corpora": "http_logs",
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      }
     },
     {
       "name": "index-append-with-ingest-baseline-pipeline",
@@ -11,7 +14,10 @@
       "bulk-size": {{bulk_size | default(5000)}},
       "ingest-percentage": {{ingest_percentage | default(100)}},
       "pipeline": "http-log-baseline-pipeline",
-      "corpora": "http_logs"
+      "corpora": "http_logs",
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      }
     },
     {
       "name": "index-append-with-ingest-grok-pipeline",
@@ -19,7 +25,10 @@
       "bulk-size": {{bulk_size | default(5000)}},
       "ingest-percentage": {{ingest_percentage | default(100)}},
       "pipeline": "http-log-grok-pipeline",
-      "corpora": "http_logs_unparsed"
+      "corpora": "http_logs_unparsed",
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      }
     },
     {
       "name": "index-append-with-ingest-geoip-pipeline",
@@ -27,7 +36,10 @@
       "bulk-size": {{bulk_size | default(5000)}},
       "ingest-percentage": {{ingest_percentage | default(100)}},
       "pipeline": "http-log-geoip-pipeline",
-      "corpora": "http_logs"
+      "corpora": "http_logs",
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      }
     },
     {
       "name": "index-append-with-timestamp-pipeline",
@@ -35,7 +47,10 @@
       "bulk-size": {{bulk_size | default(5000)}},
       "ingest-percentage": {{ingest_percentage | default(100)}},
       "pipeline": "timestamp-pipeline",
-      "corpora": "http_logs_unparsed"
+      "corpora": "http_logs_unparsed",
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      }
     },
     {
       "name": "update",
@@ -46,7 +61,10 @@
       "on-conflict": "{{on_conflict | default('update')}}",
       "conflict-probability": {{conflict_probability | default(25)}},
       "recency": {{recency | default(0)}},
-      "corpora": "http_logs"
+      "corpora": "http_logs",
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      }
     },
     {
       "name": "default",
@@ -56,6 +74,9 @@
         "query": {
           "match_all": {}
         }
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -71,6 +92,9 @@
               }
           }
         }
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       },
       "detailed-results": true,
       "assertions": [
@@ -94,6 +118,9 @@
             }
           }
         }
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       },
       "detailed-results": true,
       "assertions": [
@@ -129,6 +156,9 @@
           }
         }
       },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      },
       "detailed-results": true,
       "assertions": [
         {
@@ -163,6 +193,9 @@
           }
         }
       },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
+      },
       "detailed-results": true,
       "assertions": [
         {
@@ -186,6 +219,9 @@
             }
           }
         }
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -213,6 +249,9 @@
             }
           }
         }
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -225,6 +264,9 @@
         "query": {
           "match_all": {}
         }
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -238,6 +280,9 @@
         "sort" : [
           {"size" : "desc"}
         ]
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -251,6 +296,9 @@
         "sort" : [
           {"size" : "asc"}
         ]
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -264,6 +312,9 @@
         "sort" : [
           {"@timestamp" : "desc"}
         ]
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -279,6 +330,9 @@
           {"@timestamp" : "desc"}
         ],
         "search_after": ["1998-06-10"]
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -292,6 +346,9 @@
         "sort" : [
           {"@timestamp" : "asc"}
         ]
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {
@@ -307,6 +364,9 @@
           {"@timestamp" : "asc"}
         ],
         "search_after": ["1998-06-10"]
+      },
+      "request-params": {
+        "routing": {{routing | default("_id")}}
       }
     },
     {

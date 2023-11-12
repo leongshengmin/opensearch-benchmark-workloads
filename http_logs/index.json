@@ -2,12 +2,15 @@
   "settings": {
     "index.number_of_shards": {{ number_of_shards | default(5) }},
     "index.number_of_replicas": {{ number_of_replicas | default(0) }},
+    {%- if routing_partition_size is defined and routing_partition_size > 1 and routing_partition_size < number_of_shards %}
+    "index.routing_partition_size": {{ routing_partition_size | default(4) }},
+    {%- endif %}
     "index.requests.cache.enable": false
   },
   "mappings": {
     "dynamic": "strict",
     "_source": {
-      "enabled": {{ source_enabled | default(true) | tojson }}
+      "enabled": {{ source_enabled | default(true) | tojson }}``
     },
     "properties": {
       "@timestamp": {
